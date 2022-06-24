@@ -2,9 +2,11 @@
 
 ## Introduction
 
-This is quiz application that have multiple category of questions that you can choose from and also alows selection of all so you can answer questions from all categories.
+This is quiz application that have multiple category of questions that you can choose from and also allows selection of all so you can get questions from all categories.
 
 Note - This is a Udacity API assignment which contains two part (Fronend) that uses react to call the (Backend) API and render the json result into webview.
+
+Below are the instructions on how to start both the front and backend.
 
 ## Setup - Backend
 
@@ -13,7 +15,9 @@ Note - This is a Udacity API assignment which contains two part (Fronend) that u
 3. Create virtual environment - `python -m venv .venv`
 4. Activate virtual environment - `.venv/Scripts/Activate`
 5. Install required dependencies - `pip install -r requirements.txt`
-6. Set App
+6. Set Flask App and Environment - Windows: `$env:FLASK_APP='flaskr' $env:FLASK_ENV='development'` Other-Os: `export FLASK_APP=flaskr` `export FLASK_ENV=development`
+7. Run the api dev server - `flask run --reload --debugger`
+
 
 ## Setup - Frontend
 
