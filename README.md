@@ -10,10 +10,10 @@ Note - This is a Udacity API assignment which contains two part (Fronend) that u
 
 1. Make sure you have python3, pip, python virtualenv installed on you machine
 2. Clone the repository and cd into trivia directory
-3. Create virtual environment - on windows `python -m venv .venv`
-4. Activate virtual environment - on windows `.venv/Scripts/Activate`
-5. Install required dependencies - on windows `pip install -r requirements.txt`
-6. 
+3. Create virtual environment - `python -m venv .venv`
+4. Activate virtual environment - `.venv/Scripts/Activate`
+5. Install required dependencies - `pip install -r requirements.txt`
+6. Set App
 
 ## Setup - Frontend
 
