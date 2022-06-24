@@ -3,11 +3,13 @@ import '../stylesheets/App.css';
 import Question from './Question';
 import Search from './Search';
 import $ from 'jquery';
+import '../config';
 
 class QuestionView extends Component {
   constructor() {
     super();
     this.state = {
+      apiUrl: global.config.apiUrl,
       questions: [],
       page: 1,
       totalQuestions: 0,
@@ -22,7 +24,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `${this.state.apiUrl}/questions?page=${this.state.page}`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -31,6 +33,7 @@ class QuestionView extends Component {
           categories: result.categories,
           currentCategory: result.current_category,
         });
+
         return;
       },
       error: (error) => {
@@ -65,7 +68,7 @@ class QuestionView extends Component {
 
   getByCategory = (id) => {
     $.ajax({
-      url: `/categories/${id}/questions`, //TODO: update request URL
+      url: `${this.state.apiUrl}/categories/${id}/questions`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -84,7 +87,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `${this.state.apiUrl}/questions/search`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -112,10 +115,11 @@ class QuestionView extends Component {
     if (action === 'DELETE') {
       if (window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
+          url: `${this.state.apiUrl}/questions/${id}`, //TODO: update request URL
           type: 'DELETE',
           success: (result) => {
-            this.getQuestions();
+            const newQuestions = this.state.questions.filter(e => e.id !== result.id);
+            this.setState({ questions: newQuestions });
           },
           error: (error) => {
             alert('Unable to load questions. Please try your request again');
