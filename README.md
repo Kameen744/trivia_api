@@ -10,12 +10,16 @@ Below are the instructions on how to start both the front and backend.
 
 ## Setup - Backend
 
-1. Make sure you have python3, pip, python virtualenv installed on you machine
-2. Clone the repository and cd into trivia directory
+Make sure you have python3, pip, python virtualenv and postgresql installed on your machine
+
+1. In the project folder cd into backend and run `psql` then create database `CREATE DATABASE trivia`.
+Now that you have created a database named `trivia` press `CTRL+C` to exit the psql CLI and run `psql trivia username < trivia.psql` default username is (postgres)
+
+2. Clone the repository and cd into the project directory
 3. Create virtual environment - `python -m venv .venv`
 4. Activate virtual environment - `.venv/Scripts/Activate`
 5. Install required dependencies - `pip install -r requirements.txt`
-6. Set Flask App and Environment - Windows: `$env:FLASK_APP='flaskr' $env:FLASK_ENV='development'` Other-Os: `export FLASK_APP=flaskr` `export FLASK_ENV=development`
+6. Set Flask App and Environment - Windows: `$env:FLASK_APP='flaskr'  $env:FLASK_ENV='development'` Other-Os: `export FLASK_APP=flaskr` `export FLASK_ENV=development`
 7. Run the api dev server - `flask run --reload --debugger`
 
 
