@@ -15,7 +15,7 @@ Make sure you have python3, pip, python virtualenv and postgresql installed on y
 1. In the project folder cd into backend and run `psql` then create database `CREATE DATABASE trivia`.
 Now that you have created a database named `trivia` press `CTRL+C` to exit the psql CLI and run `psql -U username -d trivia -f trivia.psql` default username is (postgres)
 
-2. Clone the repository and cd into the project directory
+2. Clone the repository and cd into a backend folder of the project directory
 3. Create virtual environment - `python -m venv .venv`
 4. Activate virtual environment - `.venv/Scripts/Activate`
 5. Install required dependencies - `pip install -r requirements.txt`
@@ -26,7 +26,7 @@ Now that you have created a database named `trivia` press `CTRL+C` to exit the p
 ## Setup - Frontend
 
 1. Make sure you have nodejs installed on your machine
-2. CD into frontend directory and run `npm install`
+2. CD into a frontend folder of the project directory and run `npm install`
 3. After installation completed run `npm start`
 
 ## API Endpoints
