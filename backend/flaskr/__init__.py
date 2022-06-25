@@ -89,6 +89,7 @@ def create_app(test_config=None):
 
     @app.route(f'{PREFIX}/categories')
     def get_categories():
+
         categories = Category.query.all()
 
         check_resource(categories, 404)
@@ -96,6 +97,7 @@ def create_app(test_config=None):
         response_data = {"categories": format_categories(categories)}
 
         return jsonify(response_data)
+
     # """
     # @TODO:
     # Create an endpoint to handle GET requests for questions,
@@ -245,13 +247,21 @@ def create_app(test_config=None):
         current_category = request_data['quiz_category']
 
         # Filter questions based on category and filter previous questions
-        question_by_category = Question.query.filter(
-            Question.category == current_category['id']).filter(
-            Question.id not in previous_qeustions).all()
-        # throw 404 if there's no question
+        if current_category['type'] == 'click':
+            question_by_category = Question.query.filter(
+                Question.id.notin_(previous_qeustions)).all()
+        else:
+            question_by_category = Question.query.filter(
+                Question.category == current_category['id']).filter(
+                Question.id.notin_(previous_qeustions)).all()
 
-        # Pick random question
-        random_question = Question.format(random.choice(question_by_category))
+        # throw 404 if there's no question
+        if len(question_by_category) > 0:
+            # Pick random question
+            random_question = Question.format(
+                random.choice(question_by_category))
+        else:
+            raise_error(404)
 
         return jsonify({"question": random_question})
 

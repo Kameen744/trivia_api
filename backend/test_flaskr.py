@@ -28,13 +28,28 @@ class TriviaTestCase(unittest.TestCase):
             "category": 3
         }
 
+        self.new_question_fail = {
+            "answer": "Heres a new answer string",
+            "difficulty": 1,
+            "category": 3
+        }
+
         self.next_question = {
             "previous_questions": [1, 4, 20, 15],
             "quiz_category": {"type": "History", "id": "4"}
         }
 
+        self.next_question_not_found = {
+            "previous_questions": [1, 4, 20, 15],
+            "quiz_category": {"type": "History", "id": "100"}
+        }
+
         self.search_question = {
             "searchTerm": "a"
+        }
+
+        self.search_question_not_found = {
+            "searchTerm": "---"
         }
 
         # binds the app to the current context
@@ -60,13 +75,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['categories']))
         self.assertIn('1', data['categories'])
 
+    def test_404_get_categories(self):
+        res = self.client().get(f'{self.api_prefix}/categories')
+        data = json.loads(res.data)
+        self.assertNotIn('status', data)
+
     def test_get_paginated_questions(self):
         res = self.client().get(f'{self.api_prefix}/questions')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(len(data['questions']))
 
-    def test_404_get_paginated_questions(self):
+    def test_404_get_paginated_questions_beyond_pages(self):
         res = self.client().get(f'{self.api_prefix}/questions?page=100')
         self.assertEqual(res.status_code, 404)
 
@@ -77,12 +97,24 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(len(data['questions']))
 
+    def test_404_search_question_string_not_in_questions(self):
+        res = self.client().post(f'{self.api_prefix}/questions/search',
+                                 json=self.search_question_not_found)
+        data = json.loads(res.data)
+        self.assertTrue(data['status'], 404)
+
     def test_insert_new_question(self):
-        res = self.client().post(
-            f'{self.api_prefix}/questions', json=self.new_question)
+        res = self.client().post(f'{self.api_prefix}/questions',
+                                 json=self.new_question)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['message'], 'Success')
+
+    def test_500_insert_new_question_without_key_element(self):
+        res = self.client().post(f'{self.api_prefix}/questions',
+                                 json=self.new_question_fail)
+        data = json.loads(res.data)
+        self.assertTrue(data['status'], 500)
 
     def test_get_category_questions(self):
         res = self.client().get(f'{self.api_prefix}/categories/4/questions')
@@ -90,7 +122,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(len(data['questions']))
 
-    def test_if_no_category_question_found(self):
+    def test_404_category_questions_number_beyond_categories(self):
         res = self.client().get(f'{self.api_prefix}/categories/100/questions')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -102,6 +134,12 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertIn('id', data['question'])
+
+    def test_404_next_question(self):
+        res = self.client().post(
+            f'{self.api_prefix}/quizzes', json=self.next_question_not_found)
+        data = json.loads(res.data)
+        self.assertTrue(data['status'], 404)
 
     def test_delete_question(self):
         res = self.client().delete(f'{self.api_prefix}/questions/6')
