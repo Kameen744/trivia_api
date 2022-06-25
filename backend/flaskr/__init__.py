@@ -21,7 +21,8 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     # app.register_blueprint(trivia_bp, url_prefix=PREFIX)
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/api/v1/*": {"origins": "*"}},
+         supports_credentials=None)
     setup_db(app)
 
     # """
@@ -34,9 +35,10 @@ def create_app(test_config=None):
 
     @app.after_request
     def add_headers(response):
-        # response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers.add('Access-Control-Allow-Headers',
-                             'Content-Type, Authorization')
+                             'Content-Type, Authorization, ')
         response.headers.add('Access-Control-Allow-Methods',
                              'GET, POST, PATCH, DELETE, OPTIONS')
         return response
@@ -168,7 +170,7 @@ def create_app(test_config=None):
 
             Question.insert(question)
 
-            return jsonify([])
+            return jsonify({'status': 200, 'message': 'Success'})
         except:
             raise_error(500)
     # TEST: When you submit a question on the "Add" tab,
@@ -181,7 +183,7 @@ def create_app(test_config=None):
     # Create a POST endpoint to get questions based on a search term.
     # It should return any questions for whom the search term
     # is a substring of the question.
-    @app.route(f'{PREFIX}/questions/search')
+    @app.route(f'{PREFIX}/questions/search', methods=['POST'])
     def search_question():
 
         request_data = request.get_json()
