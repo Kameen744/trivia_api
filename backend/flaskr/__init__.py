@@ -35,7 +35,8 @@ def create_app(test_config=None):
 
     @app.after_request
     def add_headers(response):
-        response.headers['Access-Control-Allow-Origin'] = '*'
+        http_origin = request.environ['HTTP_ORIGIN']
+        response.headers['Access-Control-Allow-Origin'] = f'{http_origin}'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers.add('Access-Control-Allow-Headers',
                              'Content-Type, Authorization, ')
